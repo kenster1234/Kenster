@@ -70,78 +70,19 @@
                 profile_picture : imageUrl
             });
         }
-        
-        function updatetweets(data) {
-            console.log(data); 
-            var mylist = "<ul>";
-            for (var u in data.tweets) {
-                console.log(data[u]);
-                for (var t in data.tweets[u]) {
-                    console.log(data.tweets[u][t].tweet);
-                    mylist = mylist + "<li>" + data.tweets[u][t].tweet + " (" + data.users[u].email + ")</li>";
-                } 
-            }
-            mylist = mylist + "</ul>";
-            console.log(mylist);
-            var mytdiv = document.getElementById("mytweets");
-            mytdiv.innerHTML = mylist;
+
+        function signout() {
+            console.log("Signing out");
+            firebase.auth().signOut().then(function() {
+            });
         }
-        
-        // write tweets to firebase
-        function tweet() {
-            
-            twitdoc = document.getElementById("twit");
-            var nameValue = twitdoc.value;
-            var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue});
-            twitdoc.value = "";
-            console.log("tweet written")
-            
-            firebase.database().ref().once('value').then(function(snapshot) {
-                    var data = (snapshot.val());
-                    if (data == null) {
-                      console.log("No data found at /tweets");  
-                    } else {
-                      updatetweets(data);
-                    }
-                });
-            
-            // The unique key stored in tweetid is based on a timestamp, so list items will automatically be ordered chronologically. Because Firebase generates a unique key for each tweet, no write conflicts will occur if multiple users add a post at the same time. https://firebase.google.com/docs/database/admin/save-data
-            
-        }
-        
-        
     
     </script>
 
-
     <body>
-    <div id = "mydiv"> 
-    Hello 
-        <button href="In.html"><a href="In.html"> Sign In</a></button>
-    <button href="out.html" > Sign Out </button>
-    
-    </div>
-        <br>
-        <br>
-        <form>
-            Tweet:<br>
-            <textarea id="twit" type="text" name="thetweet" cols="100" rows="4"></textarea>
-        </form> 
-        <button type="button" onclick="tweet()">Submit</button>
-    
-    <div id="mytweets"></div>
-    <div id="mydata"></div>
-    <div id="myphoto"></div>
+        <button onclick="signout()">Sign out</button>
+
     </body>
 
-
-<style>
     
-    #mydiv {
-        background-color: blue;
-        width: 1440px;
-        height: 20px;
-
-    }    
-</style>
 </html>
